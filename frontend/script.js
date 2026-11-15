@@ -20,3 +20,4 @@ function add(text,who){
   chat.scrollTop=chat.scrollHeight;
 }
 
+
