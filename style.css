@@ -1,71 +1,71 @@
 
-/* JARVIS CAMERA BUTTON */
-#cam-btn {
-  background: #001421;
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  border-radius: 6px;
-  cursor: pointer;
-  min-width: 48px;
+/* JARVIS LAYOUT FIX */
+
+body {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* JARVIS MICROPHONE BUTTON */
-#mic-btn {
-  background: #001421;
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  border-radius: 6px;
-  cursor: pointer;
-  min-width: 48px;
+/* CENTER CORE */
+.core {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  margin: 30px auto;
 }
 
-/* CLEAR MEMORY */
-#clear-btn {
+/* ROUND CORE */
+.center {
+  position: absolute;
+  inset: 50px;
+  border-radius: 50%;
   background: #00ffff;
-  color: #000;
-  cursor: pointer;
-  border-radius: 6px;
+  box-shadow: 0 0 30px #00ffff;
 }
 
-/* HIDDEN IMAGE INPUT */
-#img-input {
-  display: none;
+/* STATUS PANEL */
+.status {
+  width: 100%;
+  max-width: 850px;
+  margin: 25px auto;
+  padding: 20px;
+  border: 1px solid rgba(0,255,255,.3);
+  border-radius: 12px;
 }
 
-/* BUTTON EFFECT */
-button {
-  transition: 0.2s ease;
-}
-
-button:active {
-  transform: scale(0.96);
-}
-
-/* CHAT */
+/* CHAT PANEL */
 .chat {
-  scroll-behavior: smooth;
+  width: 100%;
+  max-width: 850px;
+  height: 220px;
+  margin: 25px auto;
+  overflow-y: auto;
+  border-radius: 12px;
 }
 
-/* MOBILE RESPONSIVE */
-@media (max-width: 600px) {
+/* INPUT AREA */
+.input-area {
+  width: 100%;
+  max-width: 850px;
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media(max-width:600px) {
+  body {
+    padding: 12px;
+  }
+
   .status,
   .chat {
     width: 100%;
   }
 
-  .input-area {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  #msg {
+  .input-area input {
     flex: 1 1 100%;
-  }
-
-  #send,
-  #mic-btn,
-  #cam-btn,
-  #clear-btn {
-    flex: 1;
   }
 }
