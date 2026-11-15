@@ -4,11 +4,13 @@ if(!API_KEY){
 API_KEY = prompt('Enter your Gemini API Key:');
 if(API_KEY) localStorage.setItem('jarvis_key', API_KEY);
 }
+
 // ===== 2. SMART MODELS (ఒకటిfail అయితేnext auto try) =====
 const MODELS = ["gemini-3.6-flash", "gemini-flash-latest"];
 const chat=document.getElementById('chat');
 const input=document.getElementById('msg');
 const micBtn=document.getElementById('mic-btn');
+
 // ===== 3. GEMINI BRAIN (auto-fallback) =====
 async function callGemini(p){
 
