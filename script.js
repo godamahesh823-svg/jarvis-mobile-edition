@@ -14,10 +14,10 @@ if (!API_KEY) {
   }
 }
 
-// 2. GEMINI MODELS
+// 2. FAST GEMINI MODELS
 const MODELS = [
-  "gemini-3.8-flash",
-  "gemini-3.6-flash"
+  "gemini-3.5-flash-lite",
+  "gemini-3.8-flash"
 ];
 
 // 3. HTML ELEMENTS
@@ -26,7 +26,7 @@ const input = document.getElementById("msg");
 const sendBtn = document.getElementById("send");
 const micBtn = document.getElementById("mic-btn");
 
-// 4. CHAT MESSAGE FUNCTION
+// 4. CHAT MESSAGE
 function add(message, sender) {
   const div = document.createElement("div");
 
@@ -39,11 +39,11 @@ function add(message, sender) {
   return div;
 }
 
-// 5. GEMINI API CONNECTION
+// 5. GEMINI API
 async function callGemini(promptText) {
 
   if (!API_KEY) {
-    throw new Error("API Key missing. Reload and enter your key.");
+    throw new Error("Gemini API Key missing.");
   }
 
   let lastError;
@@ -69,7 +69,11 @@ async function callGemini(promptText) {
                   { text: promptText }
                 ]
               }
-            ]
+            ],
+            generationConfig: {
+              maxOutputTokens: 256,
+              temperature: 0.7
+            }
           })
         }
       );
@@ -78,18 +82,18 @@ async function callGemini(promptText) {
 
       if (!response.ok) {
         throw new Error(
-          data.error?.message || "Gemini API error: " + response.status
+          data.error?.message ||
+          "Gemini API error: " + response.status
         );
       }
 
-      const reply =
-        data.candidates?.[0]?.content?.parts
-          ?.map(part => part.text || "")
-          .join("")
-          .trim();
+      const reply = data.candidates?.[0]?.content?.parts
+        ?.map(part => part.text || "")
+        .join("")
+        .trim();
 
       if (!reply) {
-        throw new Error("Gemini returned an empty response.");
+        throw new Error("Empty response from Gemini.");
       }
 
       return reply;
@@ -98,11 +102,13 @@ async function callGemini(promptText) {
 
       lastError = error;
 
-      // Try the next model if this model fails.
-      if (
-        /404|429|500|502|503|504|not found|quota|rate limit|unavailable/i
-          .test(error.message)
-      ) {
+      console.error(model + " failed:", error.message);
+
+      const retryable =
+        /404|429|500|502|503|504|not found|quota|rate limit|unavailable|high demand|temporar|overload/i
+          .test(error.message);
+
+      if (retryable) {
         continue;
       }
 
@@ -113,10 +119,13 @@ async function callGemini(promptText) {
   throw lastError || new Error("All Gemini models failed.");
 }
 
-// 6. ASK JARVIS
+// 6. JARVIS RESPONSE
 async function askGemini(promptText) {
 
-  const thinking = add("J.A.R.V.I.S: Thinking...", "ai");
+  const thinking = add(
+    "J.A.R.V.I.S: Thinking...",
+    "ai"
+  );
 
   sendBtn.disabled = true;
 
@@ -143,12 +152,12 @@ async function askGemini(promptText) {
   }
 }
 
-// 7. SEND BUTTON
+// 7. SEND MESSAGE
 function sendMessage() {
 
   const text = input.value.trim();
 
-  if (!text) return;
+  if (!text || sendBtn.disabled) return;
 
   add("YOU: " + text, "user");
 
@@ -159,16 +168,13 @@ function sendMessage() {
 
 sendBtn.addEventListener("click", sendMessage);
 
-// Press Enter to send
 input.addEventListener("keydown", function(event) {
-
   if (event.key === "Enter") {
     sendMessage();
   }
-
 });
 
-// 8. SPEECH RECOGNITION
+// 8. MICROPHONE
 const SpeechRecognition =
   window.SpeechRecognition ||
   window.webkitSpeechRecognition;
@@ -198,9 +204,7 @@ if (SpeechRecognition) {
   };
 
   recognition.onerror = function(event) {
-
     add("VOICE ERROR: " + event.error, "ai");
-
   };
 
   recognition.onend = function() {
@@ -208,13 +212,11 @@ if (SpeechRecognition) {
   };
 
   micBtn.addEventListener("click", function() {
-
     try {
       recognition.start();
     } catch (error) {
       console.log(error);
     }
-
   });
 
 } else {
@@ -231,7 +233,8 @@ function speak(text) {
 
   speechSynthesis.cancel();
 
-  const utterance = new SpeechSynthesisUtterance(text);
+  const utterance =
+    new SpeechSynthesisUtterance(text);
 
   utterance.rate = 1.05;
   utterance.pitch = 0.9;
