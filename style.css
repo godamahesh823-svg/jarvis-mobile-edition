@@ -1,72 +1,214 @@
 
-/* JARVIS FULL SCREEN LAYOUT */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Orbitron', sans-serif;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: #000;
+  color: #00ffff;
+}
 
 body {
-  width: 100%;
-  max-width: none;
   min-height: 100vh;
-  margin: 0;
   padding: 20px;
   overflow-x: hidden;
 }
 
-/* CENTER CORE */
+header {
+  text-align: center;
+  padding: 15px 5px;
+}
+
+header h1 {
+  font-size: clamp(28px, 5vw, 46px);
+  color: #00ffff;
+  letter-spacing: 6px;
+  text-shadow: 0 0 15px #00ffff;
+}
+
+header p {
+  margin-top: 8px;
+  font-size: 12px;
+  letter-spacing: 4px;
+}
+
 .core {
+  position: relative;
   width: 160px;
   height: 160px;
-  position: relative;
   margin: 30px auto;
+}
+
+.ring {
+  position: absolute;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  box-shadow: 0 0 18px #00ffff;
+}
+
+.r1 {
+  inset: 0;
+  border-top-color: transparent;
+  animation: spin 3s linear infinite;
+}
+
+.r2 {
+  inset: 20px;
+  border-bottom-color: transparent;
+  animation: spin 2s linear infinite reverse;
 }
 
 .center {
   position: absolute;
   inset: 50px;
-  border-radius: 50%;
   background: #00ffff;
+  border-radius: 50%;
   box-shadow: 0 0 30px #00ffff;
+  animation: pulse 1.5s infinite;
 }
 
-/* STATUS */
-.status {
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  50% { opacity: .4; }
+}
+
+.core-text {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 4px;
+}
+
+.status, .chat {
   width: 100%;
   max-width: 850px;
   margin: 25px auto;
-  padding: 20px;
-  border: 1px solid rgba(0,255,255,.3);
+  padding: 16px;
+  background: #001421;
+  border: 1px solid #007c99;
   border-radius: 12px;
+  box-shadow: 0 0 18px #00e5ff15;
 }
 
-/* CHAT */
+.status h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 4px;
+  border-bottom: 1px solid #00e5ff25;
+  font-size: 13px;
+}
+
+.on { color: #00ff00; }
+.off { color: #ff405c; }
+
 .chat {
-  width: 100%;
-  max-width: 850px;
   height: 220px;
-  margin: 25px auto;
   overflow-y: auto;
-  border-radius: 12px;
+  font-size: 13px;
 }
 
-/* INPUT */
+.msg {
+  padding: 9px;
+  margin: 7px 0;
+  border-left: 3px solid #00ffff;
+  background: #00e5ff12;
+  overflow-wrap: anywhere;
+}
+
+.msg.user {
+  border-left-color: white;
+}
+
 .input-area {
-  width: 100%;
-  max-width: 850px;
-  margin: 20px auto;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  width: 100%;
+  max-width: 850px;
+  margin: 20px auto;
 }
 
-@media(max-width:600px) {
+#msg {
+  flex: 1 1 220px;
+  min-width: 0;
+  background: #061421;
+  color: white;
+  border: 1px solid #00ffff;
+  border-radius: 7px;
+  padding: 12px;
+  font-size: 13px;
+}
+
+button {
+  flex-shrink: 0;
+  background: #00ffff;
+  color: #001018;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#mic-btn, #cam-btn {
+  background: #001421;
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  min-width: 48px;
+}
+
+#clear-btn {
+  background: #00ffff;
+  color: #001018;
+}
+
+#img-input {
+  display: none;
+}
+
+button:active {
+  transform: scale(.96);
+}
+
+@media(max-width: 600px) {
   body {
     padding: 12px;
   }
 
-  .status,
-  .chat {
-    width: 100%;
+  .status, .chat {
+    padding: 12px;
   }
 
-  .input-area input {
+  .row {
+    font-size: 10px;
+  }
+
+  .input-area {
+    gap: 6px;
+  }
+
+  #msg {
     flex: 1 1 100%;
+  }
+
+  .input-area button {
+    flex: 1;
+    padding: 10px 8px;
+    font-size: 10px;
   }
 }
